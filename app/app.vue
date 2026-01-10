@@ -13,6 +13,7 @@ useHead({
 
 const title = 'Nuxt UI Editor Template'
 const description = 'A Notion-like WYSIWYG editor with AI-powered completions and real-time collaboration in Vue & Nuxt.'
+const toaster = { position: 'top-right' }
 
 useSeoMeta({
   title,
@@ -26,7 +27,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp>
-    <NuxtPage />
+  <UApp :toaster="toaster">
+      <NuxtPage />
   </UApp>
 </template>

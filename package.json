@@ -25,10 +25,12 @@
     "@vueuse/core": "^14.1.0",
     "ai": "^6.0.6",
     "nuxt": "^4.2.2",
+    "nuxt-emoji-picker": "^1.2.1",
     "shiki": "^3.20.0",
     "tiptap-extension-code-block-shiki": "^1.0.0",
     "y-partykit": "^0.0.33",
-    "yjs": "^13.6.28"
+    "yjs": "^13.6.28",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.12.1",

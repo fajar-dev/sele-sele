@@ -29,30 +29,84 @@
                     <UPageCard
                         title="Tailwind CSS"
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
-                        icon="i-simple-icons-tailwindcss"
                         spotlight
                         spotlight-color="primary"
                         to="https://tailwindcss.com/docs/v4-beta"
                         target="_blank"
-                    />
+                    >
+                    <template #header>
+                        <span class="text-4xl">
+                            😃
+                        </span>
+                    </template>
+                    <template #footer>
+                            <div class="flex flex-col gap-2">
+                            <UAvatarGroup size="sm" :max="5">
+                                <UAvatar src="https://github.com/benjamincanac.png" alt="Benjamin Canac" />
+                            </UAvatarGroup>     
+                            <small>Updated 2 days ago</small> 
+                            </div>      
+                        </template>
+                    </UPageCard>
                     <UPageCard
                         title="Tailwind CSS"
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
-                        icon="i-simple-icons-tailwindcss"
                         spotlight
                         spotlight-color="primary"
                         to="https://tailwindcss.com/docs/v4-beta"
                         target="_blank"
-                    />
+                    >
+                        <template #header>
+                            <span class="text-4xl">
+                                😃
+                            </span>
+                        </template>
+                        <template #footer>
+                            <div class="flex flex-col gap-2">
+                            <UAvatarGroup size="sm" :max="5">
+                                <UAvatar src="https://github.com/benjamincanac.png" alt="Benjamin Canac" />
+                                <UAvatar src="https://github.com/romhml.png" alt="Romain Hamel" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                            </UAvatarGroup>     
+                            <small>Updated 2 days ago</small> 
+                            </div>      
+                        </template>
+                    </UPageCard>
                     <UPageCard
                         title="Tailwind CSS"
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
-                        icon="i-simple-icons-tailwindcss"
                         spotlight
                         spotlight-color="primary"
                         to="https://tailwindcss.com/docs/v4-beta"
                         target="_blank"
-                    />
+                    >
+                        <template #header>
+                            <span class="text-4xl">
+                                😃
+                            </span>
+                        </template>
+                        <template #footer>
+                            <div class="flex flex-col gap-2">
+                            <UAvatarGroup size="sm" :max="5">
+                                <UAvatar src="https://github.com/benjamincanac.png" alt="Benjamin Canac" />
+                                <UAvatar src="https://github.com/romhml.png" alt="Romain Hamel" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                            </UAvatarGroup>     
+                            <small>Updated 2 days ago</small> 
+                            </div>      
+                        </template>
+                    </UPageCard>
+                </div>
+                <div class="flex justify-center">
+                    <UButton size="sm" variant="soft" color="neutral" icon="i-lucide-arrow-down">
+                        Load More
+                    </UButton>
                 </div>
             </div>
 
@@ -70,30 +124,89 @@
                     <UPageCard
                         title="Tailwind CSS"
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
-                        icon="i-simple-icons-tailwindcss"
                         spotlight
                         spotlight-color="primary"
                         to="https://tailwindcss.com/docs/v4-beta"
                         target="_blank"
-                    />
+                    >
+                        <template #header>
+                            <span class="text-4xl">
+                                😃
+                            </span>
+                        </template>
+                        <template #footer>
+                            <div class="flex flex-col gap-2">
+                            <UAvatarGroup size="sm" :max="5">
+                                <UAvatar src="https://github.com/benjamincanac.png" alt="Benjamin Canac" />
+                                <UAvatar src="https://github.com/romhml.png" alt="Romain Hamel" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                            </UAvatarGroup>     
+                            <small>Updated 2 days ago</small> 
+                            </div>      
+                        </template>
+                    </UPageCard>
                     <UPageCard
                         title="Tailwind CSS"
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
-                        icon="i-simple-icons-tailwindcss"
                         spotlight
                         spotlight-color="primary"
                         to="https://tailwindcss.com/docs/v4-beta"
                         target="_blank"
-                    />
+                    >
+                        <template #header>
+                            <span class="text-4xl">
+                                😃
+                            </span>
+                        </template>
+                        <template #footer>
+                            <div class="flex flex-col gap-2">
+                            <UAvatarGroup size="sm" :max="5">
+                                <UAvatar src="https://github.com/benjamincanac.png" alt="Benjamin Canac" />
+                                <UAvatar src="https://github.com/romhml.png" alt="Romain Hamel" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                            </UAvatarGroup>     
+                            <small>Updated 2 days ago</small> 
+                            </div>      
+                        </template>
+                    </UPageCard>
                     <UPageCard
                         title="Tailwind CSS"
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
-                        icon="i-simple-icons-tailwindcss"
                         spotlight
                         spotlight-color="primary"
                         to="https://tailwindcss.com/docs/v4-beta"
                         target="_blank"
-                    />
+                    >
+                        <template #header>
+                            <span class="text-4xl">
+                                😃
+                            </span>
+                        </template>
+                        <template #footer>
+                            <div class="flex flex-col gap-2">
+                            <UAvatarGroup size="sm" :max="5">
+                                <UAvatar src="https://github.com/benjamincanac.png" alt="Benjamin Canac" />
+                                <UAvatar src="https://github.com/romhml.png" alt="Romain Hamel" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                                <UAvatar src="https://github.com/noook.png" alt="Neil Richter" />
+                            </UAvatarGroup>     
+                            <small>Updated 2 days ago</small> 
+                            </div>      
+                        </template>
+                    </UPageCard>
+                </div>
+                <div class="flex justify-center">
+                    <UButton size="sm" variant="soft" color="neutral" icon="i-lucide-arrow-down">
+                        Load More
+                    </UButton>
                 </div>
             </div>
         </div>

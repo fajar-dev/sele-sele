@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EditorCustomHandlers } from '@nuxt/ui'
+import type { EditorCustomHandlers, DropdownMenuItem } from '@nuxt/ui'
 import type { Editor } from '@tiptap/core'
 import { Emoji } from '@tiptap/extension-emoji'
 import { TaskList, TaskItem } from '@tiptap/extension-list'
@@ -42,6 +42,21 @@ const {
 if (collaborationEnabled) {
   appConfig.ui.colors.primary = user.value.color
 }
+
+const items = ref<DropdownMenuItem[]>([
+  {
+    label: 'Export As PDF',
+    icon: 'i-lucide-file'
+  },
+  {
+    label: 'Export As Markdown',
+    icon: 'i-lucide-file'
+  },
+  {
+    label: 'Export As Web Page',
+    icon: 'i-lucide-web'
+  }
+])
 
 // Custom handlers for editor (merged with AI handlers)
 const customHandlers = {
@@ -229,10 +244,38 @@ const extensions = computed(() => [
       <template #right>
         <EditorCollaborationUsers :users="connectedUsers" />
 
-        <UEditorToolbar
-          :editor="editor"
-          :items="toolbarItems"
+        <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-cloud-upload">
+            Saving
+        </UButton>
+
+        <USeparator
+          orientation="vertical"
+          class="h-7"
         />
+        <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-settings">
+            Settings
+        </UButton>
+
+        <USeparator
+          orientation="vertical"
+          class="h-7"
+        />
+        <UDropdownMenu
+          :items="items"
+          size="sm"
+          :content="{
+            align: 'start',
+            side: 'bottom',
+            sideOffset: 8
+          }"
+          :ui="{
+            content: 'w-48'
+          }"
+        >
+        <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-download">
+            Export
+        </UButton>
+      </UDropdownMenu>
       </template>
     </AppHeader>
 
