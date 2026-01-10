@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      partykitHost: ''
+      partykitHost: 'localhost:1999'
     }
   },
 

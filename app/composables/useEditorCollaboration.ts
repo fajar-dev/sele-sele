@@ -53,7 +53,32 @@ export const getRandomColor = () => {
 
   return keys[Math.floor(Math.random() * keys.length)]!
 }
+
+const AVATARS = [
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Felix',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Shadow',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Loki',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Bandit',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Misty',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Gizmo',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Samantha',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Abby',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Maggie',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Boots',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Precious',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Miss%20kitty',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Snickers',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Mimi',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Sassy',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Simba',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Salem',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Leo',
+  'https://api.dicebear.com/9.x/avataaars/svg?seed=Garfield'
+]
+
 export const getRandomName = () => `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]} ${ANIMALS[Math.floor(Math.random() * ANIMALS.length)]}`
+export const getRandomAvatar = () => AVATARS[Math.floor(Math.random() * AVATARS.length)]!
 
 export function useEditorCollaboration(options: CollaborationOptions) {
   const { room, user, host } = options

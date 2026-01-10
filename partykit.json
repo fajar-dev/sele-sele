@@ -1,0 +1,5 @@
+{
+  "name": "sele-sele",
+  "main": "party/server.ts",
+  "compatibilityDate": "2026-01-10"
+}

@@ -16,6 +16,7 @@ defineProps<{
         <UTooltip :text="user.name">
           <UAvatar
             :alt="user.name"
+            :src="user.avatar"
             size="sm"
             :style="{
               color: user.color
@@ -24,6 +25,8 @@ defineProps<{
         </UTooltip>
       </template>
     </UAvatarGroup>
+
+    <UIcon name="i-lucide-user-plus" />
 
     <USeparator
       orientation="vertical"

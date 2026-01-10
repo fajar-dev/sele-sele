@@ -11,7 +11,11 @@ import { ImageUpload } from '~/components/editor/ImageUploadExtension'
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 
-const room = computed(() => route.query.room as string | undefined)
+const room = computed(() => {
+  const r = route.params.id as string
+  console.log('Connecting to room:', r)
+  return r
+})
 
 const user = useState('user', () => ({
   name: getRandomName(),
@@ -34,7 +38,8 @@ const {
   host: runtimeConfig.public.partykitHost,
   user: {
     name: user.value.name,
-    color: COLORS[user.value.color]!
+    color: COLORS[user.value.color]!,
+    avatar: getRandomAvatar()
   }
 })
 
@@ -52,10 +57,6 @@ const items = ref<DropdownMenuItem[]>([
     label: 'Export As Markdown',
     icon: 'i-lucide-file'
   },
-  {
-    label: 'Export As Web Page',
-    icon: 'i-lucide-web'
-  }
 ])
 
 // Custom handlers for editor (merged with AI handlers)
@@ -82,96 +83,7 @@ const { getItems: getDragHandleItems, onNodeChange } = useEditorDragHandle(custo
 const { toolbarItems, bubbleToolbarItems, getImageToolbarItems, getTableToolbarItems } = useEditorToolbar(customHandlers, { aiLoading })
 
 // Default content - only used when Y.js document is empty
-const content = ref(`# Nuxt UI Editor Template
-
-A Notion-like WYSIWYG editor with AI-powered completions and real-time collaboration in [Vue](https://vuejs.org/) & [Nuxt](https://nuxt.com/).
-
-> Add [\`?room=my-room\`](/?room=my-room) to the URL and share the link to collaborate with others.
-
----
-
-## Rich Text Editing
-
-Full formatting support with **bold**, *italic*, <u>underline</u>, ~~strikethrough~~, and \`inline code\`.
-
-![Image Placeholder](/placeholder.jpeg)
-
-### Code Blocks
-
-Code blocks are supported with syntax highlighting using [Shiki](https://shiki.dev/).
-
-\`\`\`vue
-<template>
-  <UEditor v-slot="{ editor }" v-model="value" content-type="markdown">
-    <UEditorToolbar :editor="editor" :items="items" />
-  </UEditor>
-</template>
-\`\`\`
-
-### Lists
-
-1. Numbered lists for sequential items
-2. With automatic numbering
-
-- Bullet lists work too
-  - With nested items
-  - At multiple levels
-
-- [ ] Task lists for todos
-- [x] Mark items as complete
-
-### Tables
-
-Insert and edit tables with row/column controls and cell selection.
-
-| Feature | Description | Status |
-| ------- | ----------- | ------ |
-| Tables | Full table support | ✅ |
-| Markdown | Content serialization | ✅ |
-
----
-
-## Features
-
-### Bubble & Fixed Toolbars
-
-Select text to see the bubble toolbar with formatting options. The fixed toolbar at the top provides quick access to common actions.
-
-### Drag Handle
-
-Use the drag handle on the left side of any block to reorder, duplicate, delete, or convert between block types.
-
-### Slash Commands
-
-Type \`/\` anywhere to access quick insertion commands for headings, lists, code blocks, tables, images, and more.
-
-### Image Upload
-
-Custom image upload node powered by [\`UFileUpload\`](https://ui.nuxt.com/docs/components/file-upload) component and [NuxtHub](https://hub.nuxt.com/docs/blob) with [Vercel Blob](https://vercel.com/docs/vercel-blob) support.
-
-<div data-type="image-upload"></div>
-
-### Mentions & Emojis
-
-Mention collaborators with \`@\` and add emojis with \`:\` syntax :rocket:
-
-### AI-powered Features
-
-Inline completions and text transformations powered by [AI SDK](https://ai-sdk.dev/).
-
-- **Autocompletion**: Suggestions appear as you type
-- **Selection actions**: Fix, extend, simplify, or translate selected text
-
-> *Pro tip: Press \`⌘J\` to manually trigger AI completion.*
-
-### Real-time Collaboration
-
-Collaborative editing powered by [PartyKit](https://partykit.io/). Add \`?room=my-room\` to the URL and share the link to collaborate with others in real-time. See collaborators' cursors and selections as they type.
-
----
-
-Visit the [Nuxt UI documentation](https://ui.nuxt.com/docs/components/editor) to learn more about the Editor component.
-`)
+const content = ref()
 
 // Set initial content for collaborative documents (only if empty)
 function onCreate({ editor }: { editor: Editor }) {
@@ -246,14 +158,6 @@ const extensions = computed(() => [
 
         <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-cloud-upload">
             Saving
-        </UButton>
-
-        <USeparator
-          orientation="vertical"
-          class="h-7"
-        />
-        <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-settings">
-            Settings
         </UButton>
 
         <USeparator

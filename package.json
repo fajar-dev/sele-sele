@@ -5,6 +5,8 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:party": "partykit dev",
+    "deploy:party": "partykit deploy",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.12.1",
     "eslint": "^9.39.2",
+    "partykit": "^0.0.115",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.1"
   },
