@@ -31,8 +31,7 @@
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
                         spotlight
                         spotlight-color="primary"
-                        to="https://tailwindcss.com/docs/v4-beta"
-                        target="_blank"
+                        to="/019bac87-026d-7ffa-912b-d867c2aa7926"
                     >
                     <template #header>
                         <span class="text-4xl">
@@ -53,8 +52,7 @@
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
                         spotlight
                         spotlight-color="primary"
-                        to="https://tailwindcss.com/docs/v4-beta"
-                        target="_blank"
+                        to="/019bac87-026d-7ffa-912b-d867c2aa7926"
                     >
                         <template #header>
                             <span class="text-4xl">
@@ -80,8 +78,7 @@
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
                         spotlight
                         spotlight-color="primary"
-                        to="https://tailwindcss.com/docs/v4-beta"
-                        target="_blank"
+                        to="/019bac87-026d-7ffa-912b-d867c2aa7926"
                     >
                         <template #header>
                             <span class="text-4xl">
@@ -126,8 +123,7 @@
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
                         spotlight
                         spotlight-color="primary"
-                        to="https://tailwindcss.com/docs/v4-beta"
-                        target="_blank"
+                        to="/019bac87-026d-7ffa-912b-d867c2aa7926"
                     >
                         <template #header>
                             <span class="text-4xl">
@@ -153,8 +149,7 @@
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
                         spotlight
                         spotlight-color="primary"
-                        to="https://tailwindcss.com/docs/v4-beta"
-                        target="_blank"
+                        to="/019bac87-026d-7ffa-912b-d867c2aa7926"
                     >
                         <template #header>
                             <span class="text-4xl">
@@ -180,8 +175,7 @@
                         description="Nuxt UI integrates with latest Tailwind CSS, bringing significant improvements."
                         spotlight
                         spotlight-color="primary"
-                        to="https://tailwindcss.com/docs/v4-beta"
-                        target="_blank"
+                        to="/019bac87-026d-7ffa-912b-d867c2aa7926"
                     >
                         <template #header>
                             <span class="text-4xl">

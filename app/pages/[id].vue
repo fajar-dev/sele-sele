@@ -8,6 +8,7 @@ import { CellSelection } from 'prosemirror-tables'
 import { CodeBlockShiki } from 'tiptap-extension-code-block-shiki'
 import { Markdown } from 'tiptap-markdown'
 import { ImageUpload } from '~/components/editor/ImageUploadExtension'
+import { useFullscreen } from '@vueuse/core'
 
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
@@ -22,6 +23,8 @@ const user = useState('user', () => ({
   name: getRandomName(),
   color: getRandomColor()
 }))
+
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
 
 const appConfig = useAppConfig()
 
@@ -212,6 +215,19 @@ const extensions = computed(() => [
             Export
         </UButton>
       </UDropdownMenu>
+
+        <USeparator
+          orientation="vertical"
+          class="h-7"
+        />
+
+        <UButton
+          size="sm"
+          variant="ghost"
+          color="neutral"
+          :icon="isFullscreen ? 'i-lucide-minimize' : 'i-lucide-fullscreen'"
+          @click="toggleFullscreen"
+        />
 
         <USeparator
           orientation="vertical"
