@@ -6,6 +6,7 @@ import { TaskList, TaskItem } from '@tiptap/extension-list'
 import { TableKit } from '@tiptap/extension-table'
 import { CellSelection } from 'prosemirror-tables'
 import { CodeBlockShiki } from 'tiptap-extension-code-block-shiki'
+import { Markdown } from 'tiptap-markdown'
 import { ImageUpload } from '~/components/editor/ImageUploadExtension'
 
 const route = useRoute()
@@ -43,9 +44,7 @@ const {
   }
 })
 
-
-
-const   exportItems = ref<DropdownMenuItem[]>([
+const exportItems = ref<DropdownMenuItem[]>([
   {
     label: 'Export As PDF',
     icon: 'i-lucide-file'
@@ -63,8 +62,19 @@ const breadcrumbItems = ref([
     to: '/'
   },
   {
-    label: 'Dashboard',
-    to: '/dashboard'
+    label: '😄 Tailwind CSS',
+    to: '/id'
+  },
+])
+
+const pagesItems = ref([
+  {
+    label: 'Edit',
+    icon: 'i-lucide-pencil'
+  },
+  {
+    label: 'Delete',
+    icon: 'i-lucide-trash'
   },
 ])
 
@@ -130,6 +140,7 @@ const extensions = computed(() => [
   Completion,
   Emoji,
   ImageUpload,
+  Markdown,
   TableKit,
   TaskList,
   TaskItem,
@@ -171,7 +182,12 @@ const extensions = computed(() => [
           :editor="editor"
           :items="toolbarItems"
         />
-        
+
+        <USeparator
+          orientation="vertical"
+          class="h-7"
+        />
+
         <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-cloud-upload">
             Saving
         </UButton>
@@ -195,6 +211,26 @@ const extensions = computed(() => [
         <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-download">
             Export
         </UButton>
+      </UDropdownMenu>
+
+        <USeparator
+          orientation="vertical"
+          class="h-7"
+        />
+
+        <UDropdownMenu
+          :items="pagesItems"
+          size="sm"
+          :content="{
+            align: 'start',
+            side: 'bottom',
+            sideOffset: 8
+          }"
+          :ui="{
+            content: 'w-48'
+          }"
+        >
+        <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-ellipsis-vertical" />
       </UDropdownMenu>
       </template>
     </AppHeader>

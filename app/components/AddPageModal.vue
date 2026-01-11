@@ -3,6 +3,9 @@
         v-model:open="open"
         title="Create Page"
         description="Create a new page"
+        :ui="{
+            overlay: 'backdrop-blur-[4px] bg-gray-950/10 dark:bg-gray-950/25'
+        }"
     >
         <template #body>
             <UForm
@@ -11,28 +14,34 @@
                 :state="state"
                 @submit="onSubmit"
             >
-            <div class="flex flex-col gap-4">
-                <div class="flex gap-4 w-full">
-                    <UPopover>
-                        <UButton :label="selectedEmoji" color="neutral" size="xl" variant="outline" class="text-4xl" />
-                        <template #content>
-                            <NuxtEmojiPicker
-                                :hide-search="false"
-                                :theme="theme"
-                                @select="onSelectEmoji"
+                <div class="flex flex-col gap-4">
+                    <div class="flex gap-4 w-full">
+                        <UPopover>
+                            <UButton 
+                                :label="selectedEmoji" 
+                                color="neutral" 
+                                size="xl" 
+                                variant="outline" 
+                                class="text-4xl" 
                             />
-                        </template>
-                    </UPopover>
-                    
-                    <UFormField label="Title" name="title" required class="w-full">
-                        <UInput
-                        v-model="state.title"
-                        placeholder="Title"
-                        class="w-full"
-                        />
-                    </UFormField>
+                            <template #content>
+                                <NuxtEmojiPicker
+                                    :hide-search="false"
+                                    :theme="theme"
+                                    @select="onSelectEmoji"
+                                />
+                            </template>
+                        </UPopover>
+                        
+                        <UFormField label="Title" name="title" required class="w-full">
+                            <UInput
+                                v-model="state.title"
+                                placeholder="Title"
+                                class="w-full"
+                            />
+                        </UFormField>
+                    </div>
                 </div>
-            </div>
 
                 <UFormField label="Description" name="description">
                     <UTextarea
@@ -89,7 +98,12 @@ const state = reactive<Partial<Schema>>({
 const toast = useToast()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'neutral', progress: false})
+  toast.add({ 
+    title: 'Success', 
+    description: 'The form has been submitted.', 
+    color: 'neutral', 
+    progress: false
+  })
   console.log(event.data)
   open.value = false
   state.title = ''
@@ -98,4 +112,3 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   selectedEmoji.value = '📖'
 }
 </script>
-
