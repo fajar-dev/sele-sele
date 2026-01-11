@@ -43,10 +43,7 @@ const {
   }
 })
 
-// Set primary color for the app
-if (collaborationEnabled) {
-  appConfig.ui.colors.primary = user.value.color
-}
+
 
 const   exportItems = ref<DropdownMenuItem[]>([
   {
