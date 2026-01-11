@@ -4,8 +4,13 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxthub/core',
-    'nuxt-emoji-picker'
+    'nuxt-emoji-picker',
+    'nuxt-vue3-google-signin'
   ],
+
+  googleSignIn: {
+    clientId: 'CLIENT ID OBTAINED FROM GOOGLE API CONSOLE',
+  },
 
   devtools: {
     enabled: true

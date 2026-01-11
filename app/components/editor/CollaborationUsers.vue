@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import type { CollaborationUser } from '~/composables/useEditorCollaboration'
+import MemberModal from '~/components/MemberModal.vue'
 
 defineProps<{
   users: CollaborationUser[]
 }>()
+
+const addOpen = ref(false)
+
 </script>
 
 <template>
@@ -26,7 +30,14 @@ defineProps<{
       </template>
     </UAvatarGroup>
 
-    <UIcon name="i-lucide-user-plus" />
+    <UButton
+      variant="ghost"
+      color="neutral"
+      icon="i-lucide-user-plus"
+      @click="addOpen = true"
+      size="sm"
+    />
+    <MemberModal v-model:open="addOpen" />
 
     <USeparator
       orientation="vertical"

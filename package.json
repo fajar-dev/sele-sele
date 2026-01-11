@@ -28,6 +28,7 @@
     "ai": "^6.0.6",
     "nuxt": "^4.2.2",
     "nuxt-emoji-picker": "^1.2.1",
+    "nuxt-vue3-google-signin": "0.0.13",
     "shiki": "^3.20.0",
     "tiptap-extension-code-block-shiki": "^1.0.0",
     "y-partykit": "^0.0.33",

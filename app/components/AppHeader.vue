@@ -16,11 +16,6 @@
     <template #right>
       <slot name="right" />
 
-      <USeparator
-        orientation="vertical"
-        class="h-7"
-      />
-
       <div
         role="group"
         class="flex items-center gap-0.5"
@@ -54,6 +49,20 @@
       </div>
     </template>
   </UHeader>
+  <UDashboardToolbar 
+    v-if="toolbar"
+    :ui="{
+      left: 'xl:ps-52',
+      right: 'xl:pe-52'
+    }"
+  >
+    <template #left>
+       <slot name="toolbar-left" />
+    </template>
+    <template #right>
+       <slot name="toolbar-right" />
+    </template>
+  </UDashboardToolbar>
 </template>
 
 <script setup lang="ts">
@@ -65,4 +74,9 @@
       icon: 'i-lucide-log-out'
     },
   ])
+
+const toolbar = defineModel<boolean>('toolbar', {
+  type: Boolean,
+  default: false
+})
 </script>

@@ -48,7 +48,7 @@ if (collaborationEnabled) {
   appConfig.ui.colors.primary = user.value.color
 }
 
-const items = ref<DropdownMenuItem[]>([
+const   exportItems = ref<DropdownMenuItem[]>([
   {
     label: 'Export As PDF',
     icon: 'i-lucide-file'
@@ -56,6 +56,18 @@ const items = ref<DropdownMenuItem[]>([
   {
     label: 'Export As Markdown',
     icon: 'i-lucide-file'
+  },
+])
+
+const breadcrumbItems = ref([
+  {
+    label: 'Home',
+    icon: 'i-lucide-home',
+    to: '/'
+  },
+  {
+    label: 'Dashboard',
+    to: '/dashboard'
   },
 ])
 
@@ -148,24 +160,31 @@ const extensions = computed(() => [
     @update:model-value="onUpdate"
     @create="onCreate"
   >
-    <AppHeader>
-      <template #left>
-      <PageMenu />
-
-      </template>
+    <AppHeader :toolbar="true">
       <template #right>
-        <EditorCollaborationUsers :users="connectedUsers" />
+          <EditorCollaborationUsers :users="connectedUsers" />
+      </template>
 
+      <template #toolbar-left>
+        <UBreadcrumb class="ms-5" size="sm" :items="breadcrumbItems" />
+      </template>
+      
+      <template #toolbar-right>
+        <UEditorToolbar
+          :editor="editor"
+          :items="toolbarItems"
+        />
+        
         <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-cloud-upload">
             Saving
         </UButton>
-
+  
         <USeparator
           orientation="vertical"
           class="h-7"
         />
         <UDropdownMenu
-          :items="items"
+          :items="exportItems"
           size="sm"
           :content="{
             align: 'start',
