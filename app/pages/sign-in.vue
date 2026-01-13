@@ -84,6 +84,7 @@ const handleOnSuccess = async (response: any) => {
   try {
     const result = await authService.googleLogin(response.code);
     toast.add({ title: 'Login Successful', color: 'primary' })
+    navigateTo('/')
   } catch (error) {
     toast.add({ title: 'Authentication failed', color: 'error' })
   } finally {

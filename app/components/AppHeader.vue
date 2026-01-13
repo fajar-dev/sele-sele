@@ -35,14 +35,21 @@
             content: 'w-48'
           }"
         >
+          <div v-if="isLoading" class="flex items-center gap-2 pl-2">
+            <USkeleton class="h-8 w-8 rounded-full" />
+            <div class="space-y-1">
+              <USkeleton class="h-4 w-20" />
+              <USkeleton class="h-3 w-24" />
+            </div>
+          </div>
           <UUser
+            v-else
             size="sm"
-            name="Fajar Rivaldi Chan"
-            description="fajarchan@nusa.net.id"
+            :name="authState.user?.name || 'User'"
+            :description="authState.user?.email || ''"
             class="pl-2"
             :avatar="{
-              src: 'https://i.pravatar.cc/150?u=john-doe',
-              icon: 'i-lucide-image'
+              src: authState.user?.avatar,
             }"
           />
         </UDropdownMenu>
@@ -67,11 +74,24 @@
 
 <script setup lang="ts">
   import type { DropdownMenuItem } from '@nuxt/ui'
+  import { useAuth } from '~/composables/useAuth'
 
-  const items = ref<DropdownMenuItem[]>([
+  const { state: authState, service: authService } = useAuth()
+  const toast = useToast()
+
+  const isLoading = computed(() => !!authState.token && !authState.user)
+
+  const handleLogout = async () => {
+    await authService.logout()
+    toast.add({ title: 'Logged out successfully' })
+    navigateTo('/sign-in')
+  }
+
+  const items = computed<DropdownMenuItem[]>(() => [
     {
       label: 'Sign Out',
-      icon: 'i-lucide-log-out'
+      icon: 'i-lucide-log-out',
+      onSelect: handleLogout
     },
   ])
 

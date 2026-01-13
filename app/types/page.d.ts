@@ -2,19 +2,39 @@ export interface PageItem {
   id: number
   title: string
   description: string
-  image: string
+  icon: string
+  createdAt: string
+  updatedAt: string
+  deletedAt: string
+  members?: member[]
+}
+
+export interface member {
+  email: string
+  avatar: string
+  isOwner: boolean
+  isPending: boolean
 }
 
 export interface GetPageParams {
   page?: number
   limit?: number
-  owner?: boolean
+  owned?: boolean
 }
 
 export interface PageResponse {
   success: boolean
   message: string
   data: PageItem[]
+  meta: {
+    pagination: {
+      totalItems: number
+      itemCount: number
+      itemsPerPage: number
+      totalPages: number
+      currentPage: number
+    }
+  }
 }
 
 export interface SinglePageResponse {
@@ -25,6 +45,12 @@ export interface SinglePageResponse {
 
 export interface CreatePageParams {
   title: string
-  description: string
+  description: string | null
+  icon: string
+}
+
+export interface UpdatePageParams {
+  title: string
+  description: string | null
   icon: string
 }

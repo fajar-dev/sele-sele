@@ -1,31 +1,62 @@
+import axios from "axios"
 import { apiService } from "./apiService"
 import type { AuthResponse, User } from "../types/auth"
 
 export class AuthService {
-  private readonly TOKEN_KEY = 'auth_token'
-  private readonly USER_KEY = 'auth_user'
+  private readonly ACCESS_TOKEN_KEY = 'accessToken'
+  private readonly REFRESH_TOKEN_KEY = 'refreshToken'
+  private readonly USER_KEY = 'user'
 
   public user = ref<User | null>(null)
   public token = ref<string | null>(null)
 
   constructor() {
     this.initSession()
+    apiService.setRefreshHandler(this.refreshToken.bind(this))
   }
 
   private async initSession() {
     if (typeof window === 'undefined') return
 
-    const token = localStorage.getItem(this.TOKEN_KEY)
+    const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY)
     
-    if (token) {
+    if (accessToken) {
       try {
-        this.token.value = token
-        const response = await apiService.client.get<{ success: boolean, data: User }>('/auth/me')
+        this.token.value = accessToken
+        const response = await apiService.client.get<{ success: boolean, data: User }>('/auth/me', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
         this.user.value = response.data.data
         localStorage.setItem(this.USER_KEY, JSON.stringify(this.user.value))
       } catch (error) {
-        this.logout()
+        // If init session fails, token might be expired. 
+        // Interceptor will catch 401 and try refresh.
       }
+    }
+  }
+
+  async refreshToken(): Promise<string | null> {
+    if (typeof window === 'undefined') return null
+
+    const refreshToken = localStorage.getItem(this.REFRESH_TOKEN_KEY)
+    if (!refreshToken) return null
+
+    try {
+      // Use a fresh axios instance or fetch to avoid interceptor loop if the refresh endpoint itself returns 401
+      // But assuming refresh endpoint works:
+      const config = useRuntimeConfig()
+      const response = await axios.post<AuthResponse>(`${config.public.apiUrl}/auth/refresh`, {
+        refreshToken
+      })
+      
+      this.setSession(response.data)
+      return response.data.data.accessToken
+    } catch (error) {
+       console.error('Refresh token failed:', error)
+       this.logout()
+       return null
     }
   }
 
@@ -41,31 +72,44 @@ export class AuthService {
 
   async logout() {
     if (typeof window === 'undefined') return
+        const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY)
 
     try {
       if (this.token.value) {
-        await apiService.client.post('/auth/logout')
+        this.token.value = accessToken  
+        await apiService.client.post('/auth/logout',{
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
       }
     } catch (error) {
       console.error('Logout failed:', error)
     } finally {
-      localStorage.removeItem(this.TOKEN_KEY)
+      localStorage.removeItem(this.ACCESS_TOKEN_KEY)
+      localStorage.removeItem(this.REFRESH_TOKEN_KEY)
       localStorage.removeItem(this.USER_KEY)
 
       this.token.value = null
       this.user.value = null
+      
+      // Ensure redirect happens
+      if (window.location.pathname !== '/sign-in') {
+          navigateTo('/sign-in')
+      }
     }
   }
 
   private setSession(response: AuthResponse) {
     if (typeof window === 'undefined') return
 
-    const { user, token } = response.data
+    const { user, accessToken, refreshToken } = response.data
 
-    localStorage.setItem(this.TOKEN_KEY, token)
+    localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken)
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken)
     localStorage.setItem(this.USER_KEY, JSON.stringify(user))
 
-    this.token.value = token
+    this.token.value = accessToken
     this.user.value = user
   }
 }

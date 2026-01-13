@@ -63,6 +63,7 @@
                         color="neutral"
                         variant="solid"
                         type="submit"
+                        :loading="loading"
                     />
                 </div>
             </UForm>
@@ -73,11 +74,14 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { pageService } from '~/services/pageService'
 
 const open = defineModel<boolean>("open", { default: false })
+const emit = defineEmits(['success'])
 const colorMode = useColorMode()
 const theme = computed(() => colorMode.value === 'dark' ? 'dark' : 'light')
 const selectedEmoji = ref('📖')
+const loading = ref(false)
 
 const onSelectEmoji = (emoji: any) => {
   selectedEmoji.value = emoji.i
@@ -85,7 +89,7 @@ const onSelectEmoji = (emoji: any) => {
 
 const schema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters long"),
-  description: z.string().min(3, "Description must be at least 3 characters long"),
+  description: z.string().optional(),
 })
 
 type Schema = z.output<typeof schema>
@@ -98,17 +102,32 @@ const state = reactive<Partial<Schema>>({
 const toast = useToast()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ 
-    title: 'Success', 
-    description: 'The form has been submitted.', 
-    color: 'neutral', 
-    progress: false
-  })
-  console.log(event.data)
-  open.value = false
-  state.title = ''
-  state.description = ''
-  console.log(selectedEmoji.value)
-  selectedEmoji.value = '📖'
+  loading.value = true
+  try {
+    await pageService.create({
+      title: event.data.title,
+      description: event.data.description ?? null,
+      icon: selectedEmoji.value
+    })
+    
+    toast.add({ 
+        title: 'Page created successfully.', 
+        color: 'neutral', 
+    })
+    
+    emit('success')
+    open.value = false
+    state.title = ''
+    state.description = ''
+    selectedEmoji.value = '📖'
+  } catch (error: any) {
+    toast.add({
+        title: 'Error',
+        description: error.message,
+        color: 'error'
+    })
+  } finally {
+    loading.value = false
+  }
 }
 </script>
