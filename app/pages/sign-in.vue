@@ -64,8 +64,47 @@
 
 <script setup lang="ts">
 const googleLoading = ref(false)
+const toast = useToast()
+import { authService } from "~/services/authService"
 
-function handleGoogleLogin() {
+const user = authService.user
+
+const userDropdownItems = computed(() => [
+  [{
+    label: 'Logout',
+    icon: 'i-lucide-log-out',
+    onSelect: () => {
+      authService.logout()
+      toast.add({ title: 'Logged out successfully' })
+    }
+  }]
+])
+
+const handleOnSuccess = async (response: any) => {
+  try {
+    const result = await authService.googleLogin(response.code);
+    toast.add({ title: 'Login Successful', color: 'primary' })
+  } catch (error) {
+    toast.add({ title: 'Authentication failed', color: 'error' })
+  } finally {
+    googleLoading.value = false
+  }
+};
+
+const handleOnError = (errorResponse: any) => {
+  googleLoading.value = false
+  toast.add({ title: 'Google Sign-In Error', color: 'error' })
+};
+
+const { isReady, login } = useCodeClient({
+  onSuccess: handleOnSuccess,
+  onError: handleOnError,
+});
+
+const handleGoogleLogin = () => {
+  if (!isReady.value) return
   googleLoading.value = true
+  login()
 }
+
 </script>

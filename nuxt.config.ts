@@ -9,7 +9,14 @@ export default defineNuxtConfig({
   ],
 
   googleSignIn: {
-    clientId: 'CLIENT ID OBTAINED FROM GOOGLE API CONSOLE',
+    clientId: process.env.GOOGLE_CLIENT_ID
+  },
+
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.API_BASE_URL,
+      partykitHost: process.env.PARTYKIT_HOST
+    }
   },
 
   devtools: {
@@ -21,12 +28,6 @@ export default defineNuxtConfig({
   ui: {
     experimental: {
       componentDetection: true
-    }
-  },
-
-  runtimeConfig: {
-    public: {
-      partykitHost: 'localhost:1999'
     }
   },
 
