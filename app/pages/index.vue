@@ -198,12 +198,6 @@ const loadMyPages = async (reset = false) => {
       limit: myPageParams.limit, 
       owned: true 
     })
-    
-    console.log('MyPages Load:', { 
-        currentLength: myPages.value.length, 
-        newItems: res.data.length, 
-        total: res.meta?.pagination?.totalItems 
-    })
 
     myPageParams.total = res.meta.pagination.totalItems
     

@@ -108,6 +108,14 @@
                     @click="open = false"
                 />
             </div>
+            
+            <DeleteConfirmModal
+                v-model:open="deleteOpen"
+                :title="`Remove ${memberToDelete}?`"
+                description="Are you sure you want to remove this member? They will lose access to this page."
+                confirm-label="Remove"
+                :on-confirm="onConfirmRemove"
+            />
         </template>
     </UModal>
 </template>
@@ -167,11 +175,21 @@ const getMemberItems = (member: Member) => [
     }]
 ]
 
-const removeMember = async (email: string) => {
-    if (!confirm(`Remove ${email} from this page?`)) return
+const deleteOpen = ref(false)
+const memberToDelete = ref<string | null>(null)
+
+const removeMember = (email: string) => {
+    memberToDelete.value = email
+    deleteOpen.value = true
+}
+
+const onConfirmRemove = async () => {
+    if (!memberToDelete.value) return
     try {
-        await pageService.removeMember(props.pageId, email)
+        await pageService.removeMember(props.pageId, memberToDelete.value)
         toast.add({ title: 'Member removed successfully' })
+        deleteOpen.value = false
+        memberToDelete.value = null
         await loadMembers()
     } catch (e: any) {
         toast.add({ title: 'Error removing member', description: e.message, color: 'error' })

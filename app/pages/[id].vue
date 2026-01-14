@@ -6,7 +6,6 @@ import { TaskList, TaskItem } from '@tiptap/extension-list'
 import { TableKit } from '@tiptap/extension-table'
 import { CellSelection } from 'prosemirror-tables'
 import { CodeBlockShiki } from 'tiptap-extension-code-block-shiki'
-import { Markdown } from 'tiptap-markdown'
 import { ImageUpload } from '~/components/editor/ImageUploadExtension'
 import { useFullscreen, useDebounceFn } from '@vueuse/core'
 import { pageService } from '~/services/pageService'
@@ -121,16 +120,23 @@ const breadcrumbItems = ref([
 
 const editOpen = ref(false)
 
-const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this page?')) return
-    
-    try {
+const deleteOpen = ref(false)
+
+const onConfirmDelete = async () => {
+   try {
         await pageService.delete(room.value)
+        deleteOpen.value = false
         toast.add({ title: 'Page deleted successfully' })
-        navigateTo('/')
+        setTimeout(() => {
+          navigateTo('/')
+        }, 100)
     } catch (e: any) {
         toast.add({ title: 'Error deleting page', description: e.message, color: 'error' })
     }
+}
+
+const handleDelete = () => {
+    deleteOpen.value = true
 }
 
 const pagesItems = ref([
@@ -268,7 +274,6 @@ const extensions = computed(() => [
   Completion,
   Emoji,
   ImageUpload,
-  Markdown,
   TableKit,
   TaskList,
   TaskItem,
@@ -353,7 +358,7 @@ const manualSave = () => {
     :model-value="collaborationEnabled ? undefined : content"
     content-type="markdown"
     :extensions="extensions"
-    :starter-kit="collaborationEnabled ? { undoRedo: false } : undefined"
+    :starter-kit="collaborationEnabled ? { undoRedo: false, codeBlock: false } : { codeBlock: false }"
     :handlers="customHandlers"
     autofocus
     placeholder="Write, type '/' for commands..."
@@ -381,6 +386,13 @@ const manualSave = () => {
                       ]
                 })
             }" 
+          />
+          <DeleteConfirmModal
+            v-model:open="deleteOpen"
+            title="Delete Page"
+            description="Are you sure you want to delete this page? This action cannot be undone."
+            confirm-label="Delete"
+            :on-confirm="onConfirmDelete"
           />
       </template>
 
