@@ -1,18 +1,21 @@
 <script setup>
 useHead({
   meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+    { charset: 'utf-8' },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    { key: 'theme-color', name: 'theme-color', content: color }
   ],
   link: [
-    { rel: 'icon', href: '/favicon.ico' }
+    { rel: 'icon', href: '/favicon.ico' },
+    { rel: 'manifest', href: '/manifest.webmanifest' }  
   ],
   htmlAttrs: {
     lang: 'en'
   }
 })
 
-const title = 'Nuxt UI Editor Template'
-const description = 'A Notion-like WYSIWYG editor with AI-powered completions and real-time collaboration in Vue & Nuxt.'
+const title = 'SeleSele'
+const description = 'SeleSele is a Notion alternative with AI-powered completions and real-time collaboration'
 const toaster = { position: 'top-right' }
 
 useSeoMeta({
@@ -20,9 +23,6 @@ useSeoMeta({
   description,
   ogTitle: title,
   ogDescription: description,
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/editor-light.png',
-  twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/editor-light.png',
-  twitterCard: 'summary_large_image'
 })
 </script>
 
