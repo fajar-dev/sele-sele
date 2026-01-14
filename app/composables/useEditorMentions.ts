@@ -21,7 +21,7 @@ export function useEditorMentions(collaborationUsers?: Ref<CollaborationUser[]>)
     return collaborationUsers.value.map(user => ({
       label: user.name,
       avatar: {
-        alt: user.name,
+        src: user.avatar,
         style: { color: user.color }
       }
     }))

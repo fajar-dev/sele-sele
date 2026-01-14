@@ -22,37 +22,38 @@
       >
 
         <UColorModeButton size="sm" />
-
-        <UDropdownMenu
-          :items="items"
-          size="sm"
-          :content="{
-            align: 'start',
-            side: 'bottom',
-            sideOffset: 8
-          }"
-          :ui="{
-            content: 'w-48'
-          }"
-        >
-          <div v-if="isLoading" class="flex items-center gap-2 pl-2">
-            <USkeleton class="h-8 w-8 rounded-full" />
-            <div class="space-y-1">
-              <USkeleton class="h-4 w-20" />
-              <USkeleton class="h-3 w-24" />
-            </div>
-          </div>
-          <UUser
-            v-else
+        <ClientOnly>
+          <UDropdownMenu
+            :items="items"
             size="sm"
-            :name="authState.user?.name || 'User'"
-            :description="authState.user?.email || ''"
-            class="pl-2"
-            :avatar="{
-              src: authState.user?.avatar,
+            :content="{
+              align: 'start',
+              side: 'bottom',
+              sideOffset: 8
             }"
-          />
-        </UDropdownMenu>
+            :ui="{
+              content: 'w-48'
+            }"
+          >
+            <div v-if="isLoading" class="flex items-center gap-2 pl-2">
+              <USkeleton class="h-8 w-8 rounded-full" />
+              <div class="space-y-1">
+                <USkeleton class="h-4 w-20" />
+                <USkeleton class="h-3 w-24" />
+              </div>
+            </div>
+            <UUser
+              v-else
+              size="sm"
+              :name="authState.user?.name || 'User'"
+              :description="authState.user?.email || ''"
+              class="pl-2"
+              :avatar="{
+                src: authState.user?.avatar,
+              }"
+            />
+          </UDropdownMenu>
+        </ClientOnly>
       </div>
     </template>
   </UHeader>

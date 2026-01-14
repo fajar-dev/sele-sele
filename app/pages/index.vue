@@ -1,10 +1,12 @@
 <template>
     <AppHeader>
         <template #right>
-            <UButton size="sm" color="neutral" icon="i-lucide-plus" @click="addOpen = true">
-                New Page
-            </UButton>
-            <AddPageModal v-model:open="addOpen" @success="onPageCreated" />
+            <ClientOnly>
+                <UButton size="sm" color="neutral" icon="i-lucide-plus" @click="addOpen = true">
+                    New Page
+                </UButton>
+                <AddPageModal v-model:open="addOpen" @success="onPageCreated" />
+            </ClientOnly>
         </template>
     </AppHeader>
 

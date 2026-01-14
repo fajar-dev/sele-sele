@@ -37,17 +37,6 @@ export const COLORS: Record<string, string> = {
   rose: '#fb7185'
 }
 
-const ADJECTIVES = [
-  'Swift', 'Clever', 'Bright', 'Quick', 'Sharp', 'Bold', 'Calm', 'Kind',
-  'Brave', 'Wise', 'Noble', 'Mighty', 'Gentle', 'Fierce', 'Silent', 'Wild',
-  'Golden', 'Silver', 'Cosmic', 'Lucky', 'Mystic', 'Stellar', 'Radiant', 'Daring'
-]
-const ANIMALS = [
-  'Fox', 'Owl', 'Bear', 'Wolf', 'Eagle', 'Hawk', 'Lion', 'Tiger',
-  'Falcon', 'Panther', 'Dolphin', 'Phoenix', 'Dragon', 'Raven', 'Lynx', 'Otter',
-  'Stag', 'Cobra', 'Jaguar', 'Crane', 'Badger', 'Viper', 'Condor', 'Gazelle'
-]
-
 export const getRandomColor = () => {
   const keys = Object.keys(COLORS)
 
@@ -77,7 +66,6 @@ const AVATARS = [
   'https://api.dicebear.com/9.x/avataaars/svg?seed=Garfield'
 ]
 
-export const getRandomName = () => `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]} ${ANIMALS[Math.floor(Math.random() * ANIMALS.length)]}`
 export const getRandomAvatar = () => AVATARS[Math.floor(Math.random() * AVATARS.length)]!
 
 export function useEditorCollaboration(options: CollaborationOptions) {

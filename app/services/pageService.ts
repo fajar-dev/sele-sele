@@ -1,4 +1,4 @@
-import type { CreatePageParams, GetPageParams, PageResponse, SinglePageResponse, UpdatePageParams } from "~/types/page"
+import type { CreatePageParams, GetPageParams, PageResponse, SinglePageResponse, UpdatePageParams, Member } from "~/types/page"
 import { apiService } from "./apiService"
 
 export class PageService {
@@ -53,6 +53,97 @@ export class PageService {
             return response.data
         } catch (error: any) {
             throw new Error(`Failed to update page: ${error.message}`)
+        }
+    }
+
+    async updateContent(id: string, content: string): Promise<void> {
+        try {
+            await apiService.client.post(`/pages/${id}/content`, { content }, {
+            headers: {
+                authorization: `Bearer ${useAuth().state.token}`
+            }
+            })
+        } catch (error: any) {
+            throw new Error(`Failed to update content: ${error.message}`)
+        }
+    }
+
+    async getContent(id: string): Promise<{ success: boolean; data: { content: string } }> {
+        try {
+            const response = await apiService.client.get(`/pages/${id}/content`, {
+            headers: {
+                authorization: `Bearer ${useAuth().state.token}`
+            }
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(`Failed to get page content: ${error.message}`)
+        }
+    }
+
+    async downloadMd(id: string): Promise<Blob> {
+        try {
+            const response = await apiService.client.get(`/pages/${id}/md`, {
+                headers: {
+                    authorization: `Bearer ${useAuth().state.token}`
+                },
+                responseType: 'blob'
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(`Failed to download markdown: ${error.message}`)
+        }
+    }
+
+    async downloadPdf(id: string): Promise<Blob> {
+        try {
+            const response = await apiService.client.get(`/pages/${id}/pdf`, {
+                headers: {
+                    authorization: `Bearer ${useAuth().state.token}`
+                },
+                responseType: 'blob'
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(`Failed to download PDF: ${error.message}`)
+        }
+    }
+
+    async getMembers(id: string): Promise<{ success: boolean; data: Member[] }> {
+        try {
+            const response = await apiService.client.get(`/pages/${id}/member`, {
+            headers: {
+                authorization: `Bearer ${useAuth().state.token}`
+            }
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(`Failed to get members: ${error.message}`)
+        }
+    }
+
+    async addMember(id: string, email: string): Promise<void> {
+        try {
+            await apiService.client.put(`/pages/${id}/member`, { email }, {
+            headers: {
+                authorization: `Bearer ${useAuth().state.token}`
+            }
+            })
+        } catch (error: any) {
+            throw new Error(`Failed to add member: ${error.message}`)
+        }
+    }
+
+    async removeMember(id: string, email: string): Promise<void> {
+        try {
+            await apiService.client.delete(`/pages/${id}/member`, {
+            headers: {
+                authorization: `Bearer ${useAuth().state.token}`
+            },
+            data: { email }
+            })
+        } catch (error: any) {
+            throw new Error(`Failed to remove member: ${error.message}`)
         }
     }
 

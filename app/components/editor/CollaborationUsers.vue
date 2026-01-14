@@ -4,6 +4,7 @@ import MemberModal from '~/components/MemberModal.vue'
 
 defineProps<{
   users: CollaborationUser[]
+  pageId: string
 }>()
 
 const addOpen = ref(false)
@@ -37,7 +38,7 @@ const addOpen = ref(false)
       @click="addOpen = true"
       size="sm"
     />
-    <MemberModal v-model:open="addOpen" />
+    <MemberModal v-model:open="addOpen" :page-id="pageId" />
 
     <USeparator
       orientation="vertical"

@@ -6,14 +6,18 @@ export interface PageItem {
   createdAt: string
   updatedAt: string
   deletedAt: string
-  members?: member[]
+  createdAt: string
+  updatedAt: string
+  deletedAt: string
+  members?: Member[]
 }
 
-export interface member {
-  email: string
-  avatar: string
-  isOwner: boolean
-  isPending: boolean
+export interface Member {
+    name: string
+    email: string
+    avatar: string
+    isOwner: boolean
+    isPending: boolean
 }
 
 export interface GetPageParams {

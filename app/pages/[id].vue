@@ -8,7 +8,9 @@ import { CellSelection } from 'prosemirror-tables'
 import { CodeBlockShiki } from 'tiptap-extension-code-block-shiki'
 import { Markdown } from 'tiptap-markdown'
 import { ImageUpload } from '~/components/editor/ImageUploadExtension'
-import { useFullscreen } from '@vueuse/core'
+import { useFullscreen, useDebounceFn } from '@vueuse/core'
+import { pageService } from '~/services/pageService'
+import type { Member, PageItem } from '~/types/page'
 
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
@@ -19,14 +21,19 @@ const room = computed(() => {
   return r
 })
 
-const user = useState('user', () => ({
-  name: getRandomName(),
-  color: getRandomColor()
-}))
+const auth = useAuth()
+
+const collaborationUser = computed(() => {
+    const userData = auth.state.user
+    
+    return {
+        name: userData?.name || 'Anonymous',
+        color: getRandomColor(), 
+        avatar: userData?.avatar || getRandomAvatar()
+    }
+})
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
-
-const appConfig = useAppConfig()
 
 const editorRef = useTemplateRef('editorRef')
 
@@ -36,25 +43,67 @@ const {
   enabled: collaborationEnabled,
   ready: collaborationReady,
   extensions: collaborationExtensions,
-  connectedUsers
+  connectedUsers,
+  updateUser
 } = useEditorCollaboration({
   room: room.value,
   host: runtimeConfig.public.partykitHost,
   user: {
-    name: user.value.name,
-    color: COLORS[user.value.color]!,
-    avatar: getRandomAvatar()
+    name: collaborationUser.value.name,
+    color: COLORS[collaborationUser.value.color]!,
+    avatar: collaborationUser.value.avatar
   }
 })
+
+watch(collaborationUser, (newUser) => {
+    if (collaborationReady.value) {
+        updateUser({
+            name: newUser.name,
+            color: COLORS[newUser.color]!,
+            avatar: newUser.avatar
+        })
+    }
+}, { deep: true })
+
+const handleExport = async (type: 'pdf' | 'md') => {
+    try {
+        const id = room.value
+        let blob: Blob
+        let filename = `${page.value?.title || 'document'}`
+
+        if (type === 'pdf') {
+            blob = await pageService.downloadPdf(id)
+            filename += '.pdf'
+        } else {
+            blob = await pageService.downloadMd(id)
+            filename += '.md'
+        }
+
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+        
+        toast.add({ title: 'Export successful' })
+    } catch (e: any) {
+        toast.add({ title: 'Export failed', description: e.message, color: 'error' })
+    }
+}
 
 const exportItems = ref<DropdownMenuItem[]>([
   {
     label: 'Export As PDF',
-    icon: 'i-lucide-file'
+    icon: 'i-lucide-file',
+    onSelect: () => handleExport('pdf')
   },
   {
     label: 'Export As Markdown',
-    icon: 'i-lucide-file'
+    icon: 'i-lucide-file',
+    onSelect: () => handleExport('md')
   },
 ])
 
@@ -65,23 +114,38 @@ const breadcrumbItems = ref([
     to: '/'
   },
   {
-    label: '😄 Tailwind CSS',
+    label: '...',
     to: '/id'
   },
 ])
 
+const editOpen = ref(false)
+
+const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this page?')) return
+    
+    try {
+        await pageService.delete(room.value)
+        toast.add({ title: 'Page deleted successfully' })
+        navigateTo('/')
+    } catch (e: any) {
+        toast.add({ title: 'Error deleting page', description: e.message, color: 'error' })
+    }
+}
+
 const pagesItems = ref([
   {
     label: 'Edit',
-    icon: 'i-lucide-pencil'
+    icon: 'i-lucide-pencil',
+    onSelect: () => editOpen.value = true
   },
   {
     label: 'Delete',
-    icon: 'i-lucide-trash'
+    icon: 'i-lucide-trash',
+    onSelect: () => handleDelete()
   },
 ])
 
-// Custom handlers for editor (merged with AI handlers)
 const customHandlers = {
   imageUpload: {
     canExecute: (editor: Editor) => editor.can().insertContent({ type: 'imageUpload' }),
@@ -98,25 +162,64 @@ const customHandlers = {
   ...aiHandlers
 } satisfies EditorCustomHandlers
 
+const members = ref<Member[]>([])
+
+const mentionableUsers = computed(() => {
+  return members.value
+    .filter(member => member.isPending === false)
+    .map(member => ({
+      name: member.name,
+      color: getRandomColor(),
+      avatar: member.avatar
+    }))
+})
+
+
 const { items: emojiItems } = useEditorEmojis()
-const { items: mentionItems } = useEditorMentions(connectedUsers)
+const { items: mentionItems } = useEditorMentions(mentionableUsers)
 const { items: suggestionItems } = useEditorSuggestions(customHandlers)
 const { getItems: getDragHandleItems, onNodeChange } = useEditorDragHandle(customHandlers)
 const { toolbarItems, bubbleToolbarItems, getImageToolbarItems, getTableToolbarItems } = useEditorToolbar(customHandlers, { aiLoading })
 
-// Default content - only used when Y.js document is empty
+const page = ref<PageItem | null>(null)
+const isLoading = ref(true)
+
 const content = ref()
 
-// Set initial content for collaborative documents (only if empty)
+onMounted(async () => {
+    try {
+        const res = await pageService.show(room.value)
+        page.value = res.data
+
+        const contentRes = await pageService.getContent(room.value)
+        content.value = contentRes.data.content
+        
+        try {
+            const membersRes = await pageService.getMembers(room.value)
+            members.value = membersRes.data
+        } catch (e) {
+            console.error('Failed to load members for mentions', e)
+        }
+
+        breadcrumbItems.value = [
+            { label: 'Home', icon: 'i-lucide-home', to: '/' },
+            { label: res.data.icon + ' ' + res.data.title, to: `/${res.data.id}` }
+        ]
+    } catch (e: any) {
+        toast.add({ title: 'Error loading page', description: e.message, color: 'error' })
+        navigateTo('/')
+    } finally {
+        isLoading.value = false
+    }
+})
+
 function onCreate({ editor }: { editor: Editor }) {
   if (!collaborationEnabled) return
 
   const storageKey = `editor-initialized-${room.value}`
 
-  // Skip if already initialized this session (handles HMR)
   if (sessionStorage.getItem(storageKey)) return
 
-  // Wait for Y.js to sync existing content from server before checking if empty
   setTimeout(() => {
     const text = editor.state.doc.textContent.trim()
     if (!text) {
@@ -126,10 +229,32 @@ function onCreate({ editor }: { editor: Editor }) {
   }, 500)
 }
 
+const toast = useToast()
+const isSaving = ref(false)
+const lastSaved = ref<Date | null>(null)
+
+const saveContent = async (newContent: string) => {
+    isSaving.value = true
+    try {
+        await pageService.updateContent(room.value, newContent)
+        lastSaved.value = new Date()
+    } catch (e: any) {
+        console.error('Failed to save content', e)
+        toast.add({ title: 'Error saving content', description: e.message, color: 'error' })
+    } finally {
+        setTimeout(() => {
+            isSaving.value = false
+        }, 1000)
+    }
+}
+
+const debouncedSave = useDebounceFn((newContent: string) => {
+    saveContent(newContent)
+}, 2000)
+
 function onUpdate(value: string) {
-  if (!collaborationEnabled) {
-    content.value = value
-  }
+  content.value = value
+  debouncedSave(value)
 }
 
 const extensions = computed(() => [
@@ -149,11 +274,80 @@ const extensions = computed(() => [
   TaskItem,
   ...collaborationExtensions.value
 ])
+const manualSave = () => {
+    if (content.value) {
+        saveContent(content.value)
+    }
+}
 </script>
 
 <template>
+  <div v-if="isLoading || !collaborationReady" class="min-h-screen flex flex-col">
+      <AppHeader :toolbar="true">
+        <template #toolbar-left>
+            <USkeleton class="h-5 w-32 ms-5" />
+        </template>
+        
+        <template #right>
+            <div class="flex items-center gap-1">
+              <USkeleton class="h-6 w-6 rounded-full" />
+              <USkeleton class="h-6 w-6 rounded-full" />
+              <USkeleton class="h-6 w-6 rounded-full" />
+            </div>
+        </template>
+
+        <template #toolbar-right>
+            <div class="flex items-center gap-2">
+                <div class="flex gap-1">
+                    <USkeleton class="h-8 w-8" />
+                    <USkeleton class="h-8 w-8" />
+                    <USkeleton class="h-8 w-8" />
+                </div>
+
+                <USeparator orientation="vertical" class="h-7" />
+
+                <USkeleton class="h-8 w-16" />
+          
+                <USeparator orientation="vertical" class="h-7" />
+                <USkeleton class="h-8 w-20" />
+
+                <USeparator orientation="vertical" class="h-7" />
+
+                <USkeleton class="h-8 w-8" />
+
+                <USeparator orientation="vertical" class="h-7" />
+
+                <USkeleton class="h-8 w-8" />
+            </div>
+        </template>
+      </AppHeader>
+
+      <!-- Editor Content Skeleton -->
+      <div class="flex-1 p-4 sm:p-14 max-w-4xl mx-auto w-full space-y-6">
+          <USkeleton class="h-[3.5rem] w-3/4 mb-4" /> <!-- Title -->
+          
+          <div class="space-y-3">
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-2/3" />
+          </div>
+
+          <div class="space-y-3 pt-2">
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-11/12" />
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-4/5" />
+          </div>
+
+          <div class="space-y-3 pt-2">
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-3/4" />
+          </div>
+      </div>
+  </div>
+
   <UEditor
-    v-if="collaborationReady"
+    v-else
     ref="editorRef"
     v-slot="{ editor, handlers }"
     :model-value="collaborationEnabled ? undefined : content"
@@ -173,7 +367,21 @@ const extensions = computed(() => [
   >
     <AppHeader :toolbar="true">
       <template #right>
-          <EditorCollaborationUsers :users="connectedUsers" />
+          <EditorCollaborationUsers :users="connectedUsers" :page-id="room" />
+          <EditPageModal 
+            v-if="page"
+            v-model:open="editOpen" 
+            :page="page" 
+            @success="() => {
+                pageService.show(room).then(res => {
+                      page = res.data
+                      breadcrumbItems = [
+                          { label: 'Home', icon: 'i-lucide-home', to: '/' },
+                          { label: res.data.icon + ' ' + res.data.title, to: `/${res.data.id}` }
+                      ]
+                })
+            }" 
+          />
       </template>
 
       <template #toolbar-left>
@@ -191,8 +399,16 @@ const extensions = computed(() => [
           class="h-7"
         />
 
-        <UButton size="sm" variant="ghost" color="neutral" icon="i-lucide-cloud-upload">
-            Saving
+        <UButton 
+            size="sm" 
+            variant="ghost" 
+            color="neutral" 
+            :icon="isSaving ? 'i-lucide-loader-2' : 'i-lucide-save'"
+            :loading="isSaving"
+            :disabled="isSaving"
+            @click="manualSave"
+        >
+            {{ isSaving ? 'Saving...' : 'Save' }}
         </UButton>
   
         <USeparator

@@ -1,8 +1,8 @@
 <template>
     <UModal
         v-model:open="open"
-        title="Create Page"
-        description="Create a new page"
+        title="Edit Page"
+        description="Update page information"
     >
         <template #body>
             <UForm
@@ -50,10 +50,11 @@
                         @click="open = false"
                     />
                     <UButton
-                        label="Save"
+                        label="Save Changes"
                         color="neutral"
                         variant="solid"
                         type="submit"
+                        :loading="loading"
                     />
                 </div>
             </UForm>
@@ -64,11 +65,19 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { pageService } from '~/services/pageService'
+import type { PageItem } from '~/types/page'
 
+const props = defineProps<{
+    page: PageItem
+}>()
+
+const emit = defineEmits(['success'])
 const open = defineModel<boolean>("open", { default: false })
 const colorMode = useColorMode()
 const theme = computed(() => colorMode.value === 'dark' ? 'dark' : 'light')
-const selectedEmoji = ref('📖')
+const selectedEmoji = ref(props.page.icon || '📖')
+const loading = ref(false)
 
 const onSelectEmoji = (emoji: any) => {
   selectedEmoji.value = emoji.i
@@ -76,26 +85,45 @@ const onSelectEmoji = (emoji: any) => {
 
 const schema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters long"),
-  description: z.string().min(3, "Description must be at least 3 characters long"),
+  description: z.string().optional(),
 })
 
 type Schema = z.output<typeof schema>
 
 const state = reactive<Partial<Schema>>({
-  title: '',
-  description: ''
+  title: props.page.title,
+  description: props.page.description
+})
+
+// Update state when page prop changes
+watch(() => props.page, (newPage) => {
+    state.title = newPage.title
+    state.description = newPage.description
+    selectedEmoji.value = newPage.icon
 })
 
 const toast = useToast()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'The form has been submitted.', color: 'neutral'})
-  console.log(event.data)
-  open.value = false
-  state.title = ''
-  state.description = ''
-  console.log(selectedEmoji.value)
-  selectedEmoji.value = '📖'
+  loading.value = true
+  try {
+    await pageService.update(props.page.id.toString(), {
+        title: event.data.title,
+        description: event.data.description ?? null,
+        icon: selectedEmoji.value
+    })
+    
+    toast.add({ 
+        title: 'Page updated successfully.', 
+        color: 'neutral', 
+    })
+    
+    emit('success')
+    open.value = false
+  } catch (e: any) {
+    toast.add({ title: 'Error updating page', description: e.message, color: 'error' })
+  } finally {
+    loading.value = false
+  }
 }
 </script>
-
