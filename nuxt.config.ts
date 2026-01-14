@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    googleGenerativeAiApiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
     public: {
       apiUrl: process.env.API_BASE_URL,
       partykitHost: process.env.PARTYKIT_HOST

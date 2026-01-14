@@ -1,7 +1,11 @@
 import { streamText } from 'ai'
-import { google } from '@ai-sdk/google'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
+  const google = createGoogleGenerativeAI({
+    apiKey: config.googleGenerativeAiApiKey
+  })
   const { prompt, mode, language } = await readBody(event)
   if (!prompt) {
     throw createError({ statusCode: 400, message: 'Prompt is required' })
