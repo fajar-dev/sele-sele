@@ -20,10 +20,10 @@
                     
                     <div class="space-y-2">
                         <h1 class="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
-                            SELE SELE
+                            SeleSele
                         </h1>
                         <p class="text-gray-600 dark:text-gray-400 text-sm">
-                            Note pages editor like Notion
+                             Notion alternative with AI-powered completions and real-time collaboration
                         </p>
                     </div>
                     

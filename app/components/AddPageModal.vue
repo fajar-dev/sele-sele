@@ -104,7 +104,7 @@ const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true
   try {
-    await pageService.create({
+    const res = await pageService.create({
       title: event.data.title,
       description: event.data.description ?? null,
       icon: selectedEmoji.value
@@ -120,6 +120,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     state.title = ''
     state.description = ''
     selectedEmoji.value = '📖'
+    navigateTo('/page/' + res.data.id)
   } catch (error: any) {
     toast.add({
         title: 'Error',

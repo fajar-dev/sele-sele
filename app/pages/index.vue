@@ -50,7 +50,7 @@
                             :description="page.description"
                             spotlight
                             spotlight-color="primary"
-                            :to="`/${page.id}`"
+                            :to="`page/${page.id}`"
                         >
                         <template #header>
                             <span class="text-4xl">
@@ -124,7 +124,7 @@
                             :description="page.description"
                             spotlight
                             spotlight-color="primary"
-                            :to="`/${page.id}`"
+                            :to="`page/${page.id}`"
                         >
                             <template #header>
                                 <span class="text-4xl">

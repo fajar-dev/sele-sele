@@ -217,7 +217,7 @@ onMounted(async () => {
 
         breadcrumbItems.value = [
             { label: 'Home', icon: 'i-lucide-home', to: '/' },
-            { label: res.data.icon + ' ' + res.data.title, to: `/${res.data.id}` }
+            { label: res.data.icon + ' ' + res.data.title, to: `/page/${res.data.id}` }
         ]
     } catch (e: any) {
         toast.add({ title: 'Error loading page', description: e.message, color: 'error' })
@@ -390,7 +390,7 @@ const manualSave = () => {
                       page = res.data
                       breadcrumbItems = [
                           { label: 'Home', icon: 'i-lucide-home', to: '/' },
-                          { label: res.data.icon + ' ' + res.data.title, to: `/${res.data.id}` }
+                          { label: res.data.icon + ' ' + res.data.title, to: `/page/${res.data.id}` }
                       ]
                 })
             }" 
@@ -423,7 +423,7 @@ const manualSave = () => {
             size="sm" 
             variant="ghost" 
             color="neutral" 
-            :icon="isSaving ? 'i-lucide-loader-2' : 'i-lucide-save'"
+            :icon="isSaving ? 'i-lucide-loader-2' : 'i-lucide-cloud-upload'"
             :loading="isSaving"
             :disabled="isSaving"
             @click="manualSave"

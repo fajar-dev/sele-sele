@@ -75,7 +75,56 @@ export function useEditorToolbar<T extends EditorCustomHandlers>(_customHandlers
         kind: 'aiTranslate',
         language: 'German',
         label: 'German'
-      }]
+      }, {
+        kind: 'aiTranslate',
+        language: 'Italian',
+        label: 'Italian'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Portuguese',
+        label: 'Portuguese'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Russian',
+        label: 'Russian'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Chinese',
+        label: 'Chinese'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Japanese',
+        label: 'Japanese'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Korean',
+        label: 'Korean'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Arabic',
+        label: 'Arabic'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Hindi',
+        label: 'Hindi'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Urdu',
+        label: 'Urdu'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Vietnamese',
+        label: 'Vietnamese'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Thai',
+        label: 'Thai'
+      }, {
+        kind: 'aiTranslate',
+        language: 'Indonesian',
+        label: 'Indonesian'
+      }
+    ]
     }]
   }], [{
     label: 'Turn into',
