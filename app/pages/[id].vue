@@ -189,6 +189,7 @@ const { toolbarItems, bubbleToolbarItems, getImageToolbarItems, getTableToolbarI
 
 const page = ref<PageItem | null>(null)
 const isLoading = ref(true)
+const isOwner = ref(false)
 
 const content = ref()
 
@@ -201,10 +202,17 @@ onMounted(async () => {
         content.value = contentRes.data.content
         
         try {
-            const membersRes = await pageService.getMembers(room.value)
-            members.value = membersRes.data
+            const memberRes = await pageService.getMembers(room.value)
+            members.value = memberRes.data
         } catch (e) {
             console.error('Failed to load members for mentions', e)
+        }
+
+        try {
+            const permissionRes = await pageService.getPermission(room.value)
+            isOwner.value = permissionRes.data.isOwner
+        } catch (e) {
+            console.error('Failed to load permission', e)
         }
 
         breadcrumbItems.value = [
@@ -463,6 +471,7 @@ const manualSave = () => {
         />
 
         <UDropdownMenu
+          v-if="isOwner"
           :items="pagesItems"
           size="sm"
           :content="{

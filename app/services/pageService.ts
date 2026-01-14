@@ -158,6 +158,18 @@ export class PageService {
             throw new Error(`Failed to delete page: ${error.message}`)
         }
     }
+    async getPermission(id: string): Promise<{ success: boolean; data: { isOwner: boolean } }> {
+        try {
+            const response = await apiService.client.get(`/pages/${id}/permission`, {
+                headers: {
+                    authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+             throw new Error(`Failed to get page permission: ${error.message}`)
+        }
+    }
 }
 
 export const pageService = new PageService()
