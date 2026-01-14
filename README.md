@@ -1,8 +1,6 @@
 # SeleSele
 
-SeleSele is a Notion-alternative WYSIWYG editor built with Nuxt 3, designed for real-time collaboration and AI-powered content generation.
-
-![SeleSele Editor](https://ui.nuxt.com/assets/templates/nuxt/editor-light.png)
+SeleSele is a Notion alternative with AI-powered completions and real-time collaboration
 
 ## Features
 
