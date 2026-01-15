@@ -31,6 +31,10 @@ export function useEditorSuggestions<T extends EditorCustomHandlers>(_customHand
     label: 'Heading 3',
     icon: 'i-lucide-heading-3'
   }, {
+    kind: 'horizontalRule',
+    label: 'Divider',
+    icon: 'i-lucide-separator-horizontal'
+  }, {
     kind: 'bulletList',
     label: 'Bullet List',
     icon: 'i-lucide-list'
