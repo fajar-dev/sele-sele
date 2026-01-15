@@ -7,8 +7,11 @@ import { TableKit } from '@tiptap/extension-table'
 import { CellSelection } from 'prosemirror-tables'
 import { CodeBlockShiki } from 'tiptap-extension-code-block-shiki'
 import { ImageUpload } from '~/components/editor/ImageUploadExtension'
+import { CustomMention } from '~/components/editor/MentionExtension'
 import { useFullscreen, useDebounceFn } from '@vueuse/core'
 import { pageService } from '~/services/pageService'
+
+
 import type { Member, PageItem } from '~/types/page'
 
 const route = useRoute()
@@ -280,6 +283,7 @@ const extensions = computed(() => [
     }
   }),
   Completion,
+  CustomMention,
   Emoji,
   ImageUpload,
   TableKit,

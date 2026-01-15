@@ -18,7 +18,7 @@ const addOpen = ref(false)
         v-for="user in users"
         :key="user.name"
       >
-        <UTooltip :text="user.name">
+        <UTooltip :delay-duration="0" :text="user.name">
           <UAvatar
             :alt="user.name"
             :src="user.avatar"
