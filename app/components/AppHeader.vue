@@ -51,6 +51,10 @@
               :avatar="{
                 src: authState.user?.avatar,
               }"
+              :ui="{
+                name: 'hidden sm:block',
+                description: 'hidden sm:block'
+              }"
             />
           </UDropdownMenu>
         </ClientOnly>
