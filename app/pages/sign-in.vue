@@ -1,10 +1,8 @@
 
 <template>
     <div class="h-screen flex items-center justify-center px-4 relative overflow-hidden">
-        <!-- Background blur circles -->
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-black/20 dark:bg-white/10 rounded-full blur-3xl animate-pulse" />
-        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-black/20 dark:bg-white/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;" />
-        
+        <HeroBackground/>
+
         <UContainer class="max-w-md relative z-10">
             <div
                 class="p-5"

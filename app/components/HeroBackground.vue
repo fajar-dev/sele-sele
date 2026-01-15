@@ -14,7 +14,7 @@ onMounted(() => {
   <div class="absolute inset-x-0 top-0 -z-10 overflow-hidden pointer-events-none select-none h-[600px] flex justify-center">
     <!-- Gradients -->
     <div
-      class="absolute -top-[20%] w-[60%] h-[70%] rounded-full bg-primary-500/20 blur-[120px] transition-all duration-1000 ease-out transform translate-z-0"
+      class="absolute -top-[20%] w-[60%] h-[70%] rounded-full bg-primary-500/10 blur-[120px] transition-all duration-1000 ease-out transform translate-z-0"
       :class="[
         isLoading ? 'animate-pulse' : (appear ? 'opacity-100 scale-100' : 'opacity-0 scale-90')
       ]"
