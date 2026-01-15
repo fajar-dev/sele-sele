@@ -10,11 +10,12 @@
         </template>
     </AppHeader>
 
+    <HeroBackground/>
     <UContainer>
         <div class="space-y-8 py-8">
             <UPageHeader
-                :title="`Hello, ${authState.user?.name ?? ''} !!`"
-                description="Good Morning, Have a nice day"
+                :title="`Hello, ${authState.user?.name ?? ''} 👋`"
+                :description="`${greeting}, Have a nice day`"
             />
 
             <!-- My Page Section -->
@@ -175,6 +176,13 @@ import type { PageItem } from '~/types/page'
 const { state: authState } = useAuth()
 const addOpen = ref(false)
 const toast = useToast()
+
+const greeting = computed(() => {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good Morning'
+  if (hour < 18) return 'Good Afternoon'
+  return 'Good Evening'
+})
 
 const myPages = ref<PageItem[]>([])
 const collabPages = ref<PageItem[]>([])

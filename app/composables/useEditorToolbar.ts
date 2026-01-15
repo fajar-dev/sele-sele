@@ -206,12 +206,13 @@ export function useEditorToolbar<T extends EditorCustomHandlers>(_customHandlers
     mark: 'strike',
     icon: 'i-lucide-strikethrough',
     tooltip: { text: 'Strikethrough' }
-  }, {
+  },
+   {
     kind: 'mark',
     mark: 'code',
     icon: 'i-lucide-code',
     tooltip: { text: 'Code' }
-  }], [{
+  }, {
     slot: 'link' as const,
     icon: 'i-lucide-link'
   }, {
